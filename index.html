@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kontaktlar — Telegram & Instagram</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --card:#0b1220;
+      --accent:#06b6d4;
+      --muted:#94a3b8;
+      --glass: rgba(255,255,255,0.03);
+      --shadow: 0 6px 20px rgba(2,6,23,0.6);
+      --radius:18px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: linear-gradient(180deg,#071029 0%, #071829 60%), var(--bg);
+      color:#e6eef8;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .card{
+      width:100%;
+      max-width:420px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:22px;
+      backdrop-filter: blur(6px);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+    .header{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom:14px;
+    }
+    .logo{
+      width:56px;
+      height:56px;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),#7c3aed);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:20px;
+      color:white;
+      box-shadow:0 6px 18px rgba(3,10,25,0.6);
+    }
+    h1{font-size:18px;margin:0}
+    p.sub{margin:0;color:var(--muted);font-size:13px}
+    .items{display:grid;gap:12px;margin-top:18px}
+    .item{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      background:var(--glass);
+      padding:12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.02);
+    }
+    .icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+    .t-telegram{background:linear-gradient(135deg,#15aabf,#065f46);color:white}
+    .t-channel{background:linear-gradient(135deg,#3b82f6,#06b6d4);color:white}
+    .meta{flex:1}
+    .meta .title{font-weight:600;font-size:15px}
+    .meta .hint{font-size:13px;color:var(--muted)}
+    .actions{display:flex;gap:8px;margin-top:14px}
+    .btn{
+      flex:1;
+      padding:10px 12px;
+      border-radius:12px;
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.06);
+      color:inherit;
+      cursor:pointer;
+      font-weight:600;
+      font-size:14px;
+    }
+    .btn.primary{
+      background:linear-gradient(90deg,var(--accent),#7c3aed);
+      border:none;
+      color:#041122;
+      box-shadow:0 8px 24px rgba(6,182,212,0.12);
+    }
+    .small{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+    /* responsive */
+    @media (max-width:420px){
+      .card{padding:16px}
+      .logo{width:48px;height:48px}
+    }
+  </style>
+</head>
+<body>
+  <div class="card" role="region" aria-label="Kontaktlar">
+    <div class="header">
+      <div class="logo">TG</div>
+      <div>
+        <h1>Telegram & Instagram</h1>
+        <p class="sub">Tez va chotki — nicklarni ko‘rsatadi va Instagramni ochadi</p>
+      </div>
+    </div>
+
+    <div class="items">
+      <!-- Telegram nick -->
+      <div class="item">
+        <div class="icon t-telegram">@</div>
+        <div class="meta">
+          <div class="title" id="tgNick">TELEGRAM_NICK</div>
+          <div class="hint">Shaxsiy Telegram nick</div>
+        </div>
+        <button class="btn" onclick="openTelegram()">Och</button>
+      </div>
+
+      <!-- Telegram channel -->
+      <div class="item">
+        <div class="icon t-channel">#</div>
+        <div class="meta">
+          <div class="title" id="tgChannel">TELEGRAM_CHANNEL</div>
+          <div class="hint">Telegram kanal</div>
+        </div>
+        <button class="btn" onclick="openChannel()">Och</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <!-- Instagram open: try app then fallback to web -->
+      <button class="btn primary" onclick="openInstagram()">Instagramni ochish</button>
+      <button class="btn" onclick="copyAll()">Nusxalash</button>
+    </div>
+
+    <div class="small">Instagram ochish ilovada ishlamasa, brauzerda ochadi. Nusxa tugmasi telegram nick va kanalni nusxalaydi.</div>
+  </div>
+
+  <script>
+    // === MEN BU ERDA SIZ BERGAN MA'LUMOTNI QO'YDIM ===
+    const TELEGRAM_NICK = "Ja_vohir_1";        // 🔎 (1) SIZNING telegram nikingiz: @Ja_vohir_1
+    const TELEGRAM_CHANNEL = "https://t.me/+aBH1mW3cW2NkZjhi";  // 🔎 (2) SIZ BERGAN kanalga toʻliq havola (invite link)
+    const INSTAGRAM_USERNAME = "ja_vohir_1"; // agar kerak bo'lsa shu yerga instagram nomingizni yozing
+    // ==========================================
+
+    // foydalanuvchi uchun ko'rsatish (agar @ bo'lmasa, avtomatik qo'yadi)
+    function normalizeShow(name){
+      if(!name) return "";
+      return name.startsWith("@") ? name : "@" + name;
+    }
+
+    // Ko'rsatish joylari yangilanadi:
+    document.getElementById("tgNick").textContent = normalizeShow(TELEGRAM_NICK.replace(/@/g,""));
+    document.getElementById("tgChannel").textContent = TELEGRAM_CHANNEL; // 🔎 (3) Bu yerda kanal manzilini to'liq ko'rsatdim
+
+    // Telegramni ochish: ilovada url scheme, fallback — web Telegram
+    function openTelegram(){
+      const nick = TELEGRAM_NICK.replace(/^@/,"");
+      const appUrl = "tg://resolve?domain=" + encodeURIComponent(nick);
+      const webUrl = "https://t.me/" + encodeURIComponent(nick);
+      openWithFallback(appUrl, webUrl);
+    }
+
+    function openChannel(){
+      // Agar TELEGRAM_CHANNEL http(s) bilan boshlangan bo'lsa, to'g'ridan-to'g'ri shu linkni ochamiz
+      if(TELEGRAM_CHANNEL.startsWith("http")){
+        window.open(TELEGRAM_CHANNEL, "_blank");
+        return;
+      }
+      // aks holda avvalgi usul (username asosida)
+      const chan = TELEGRAM_CHANNEL.replace(/^@/,"");
+      const appUrl = "tg://resolve?domain=" + encodeURIComponent(chan);
+      const webUrl = "https://t.me/" + encodeURIComponent(chan);
+      openWithFallback(appUrl, webUrl);
+    }
+
+    // Instagram: ochishga harakat qiladi (ilova), yo'q bo'lsa vebga tushadi
+    function openInstagram(){
+      const insta = INSTAGRAM_USERNAME.replace(/^@/,"");
+      const appUrlI = "instagram://user?username=" + encodeURIComponent(insta);
+      const webUrl = "https://instagram.com/" + encodeURIComponent(insta);
+      openWithFallback(appUrlI, webUrl);
+    }
+
+    // Umumiy fallback ochish
+    function openWithFallback(appUrl, webUrl){
+      const ifr = document.createElement("iframe");
+      ifr.style.display = "none";
+      ifr.src = appUrl;
+      document.body.appendChild(ifr);
+
+      setTimeout(function(){
+        try{ document.body.removeChild(ifr); } catch(e){}
+        window.location.href = webUrl;
+      }, 800);
+    }
+
+    // Nusxalash: telegram nick va kanalni nusxalab beradi
+    function copyAll(){
+      const txt = `Telegram: ${normalizeShow(TELEGRAM_NICK.replace(/@/g,""))}\nKanal: ${TELEGRAM_CHANNEL}\nInstagram: @${INSTAGRAM_USERNAME.replace(/@/g,"")}`;
+      navigator.clipboard?.writeText(txt).then(()=>{
+        alert("Nusxa olindi!");
+      }).catch(()=>{
+        const ta = document.createElement("textarea");
+        ta.value = txt;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        alert("Nusxa olindi (fallback)!");
+      });
+    }
+  </script>
+</body>
+</html>
